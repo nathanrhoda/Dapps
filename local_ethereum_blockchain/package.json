@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ethereumjs-tx": "^2.1.2",
+    "hex2ascii": "^0.0.3",
     "web3": "^1.4.0"
   }
 }
