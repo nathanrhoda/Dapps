@@ -32,7 +32,7 @@
         if (typeof web3 !== 'undefined') {
             web3 = new Web3(web3.currentProvider);
         } else {
-            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+            web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/v3/ea09cb27a7824d06ae896e3b7c27f484"));
         }
 
         // Set a default account
@@ -68,7 +68,7 @@
                 "stateMutability": "view",
                 "type": "function"
             }
-        ], '0xeA85FB82C4294a65550a2F8de81B4799d6De79e1');
+        ], '0xD05EAb48e7e0D9aBE4a3F603DDAC482599Cb9979');
       
         console.log(myMessage);
         $("#setMessageButton").click(function () {
