@@ -22,61 +22,80 @@
             blockchain!</label>
         <input id="userInput" type="text">
 
-        <button id="setMessageButton">Set secret message</button>
+        <button id="setMessageButton" onclick="setMessageFunction();">Set secret message</button>
+        <button id="getMessageButton" onclick="getMessageFunction();">Get message</button>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script>
+    <script type="text/javascript">
+        async function loadWeb3() {
+                    if (window.ethereum) {
+                        window.web3 = new Web3(window.ethereum);
+                        window.ethereum.enable();
+                    }
+                }
 
-        // Connect a the web3 provider
-        if (typeof web3 !== 'undefined') {
-            web3 = new Web3(web3.currentProvider);
-        } else {
-            web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/v3/ea09cb27a7824d06ae896e3b7c27f484"));
+        async function loadContract() {
+                return await new window.web3.eth.Contract([
+                {
+                    "constant": false,
+                    "inputs": [
+                        {
+                            "name": "x",
+                            "type": "string"
+                        }
+                    ],
+                    "name": "setMessage",
+                    "outputs": [],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "getMessage",
+                    "outputs": [
+                        {
+                            "name": "",
+                            "type": "string"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                }
+            ], '0xD05EAb48e7e0D9aBE4a3F603DDAC482599Cb9979');
         }
 
-        // Set a default account
-        web3.eth.defaultAccount = web3.eth.accounts[0];        
+        async function setMessageFunction() {                        
+            message = $("#userInput").val();
+            const account = await getCurrentAccount();
+            await window.contract.methods.setMessage(message).send({ from: account });            
+        }
 
-        // Get the contract address
-        var myMessage = new web3.eth.Contract([
-            {
-                "constant": false,
-                "inputs": [
-                    {
-                        "name": "x",
-                        "type": "string"
-                    }
-                ],
-                "name": "setMessage",
-                "outputs": [],
-                "payable": false,
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "constant": true,
-                "inputs": [],
-                "name": "getMessage",
-                "outputs": [
-                    {
-                        "name": "",
-                        "type": "string"
-                    }
-                ],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            }
-        ], '0xD05EAb48e7e0D9aBE4a3F603DDAC482599Cb9979');
-      
-        console.log(myMessage);
-        $("#setMessageButton").click(function () {
-                message = $("#userInput").val();
-                myMessage.methods.setMessage(message);                
-                console.log(message);
-            });                    
+        async function getMessageFunction() {                        
+            const account = await getCurrentAccount();
+            await window.contract.methods.getMessage().call().then(function(x){
+                alert(x);
+            });            
+            // console.log(JSON.stringify(returnedMessage));
+            // alert(JSON.stringify(returnedMessage));
+        }
+        
+        async function getCurrentAccount() {
+            const accounts = await window.web3.eth.getAccounts();            
+            return accounts[0];
+            //return web3.eth.defaultAccount;
+        }                      
+        
+        async function load() {
+            await loadWeb3();
+            window.contract = await loadContract();            
+        }
             
+        load();
+      
     </script>
 </body>
 
