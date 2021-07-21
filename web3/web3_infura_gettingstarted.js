@@ -12,8 +12,6 @@ var address = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
 web3.eth.getBalance(address, (err, bal)=> {balance = bal})
 
 
-
-
 web3.eth.getBalance('0x639eB9164E65dE52a958E833f1E9857BC3d85E40', (err, bal)=> {balance = bal})
 
 
